@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.project.dao.IDao">
+	<select id="Mainlist" resultType="com.spring.project.dto.BDto">
+		select seq, title from post
+	</select>
+	
+	<select id="user_login" resultType="com.spring.project.dto.BDto">
+		select * from user where user_id = #{param1} and user_pw = #{param2}
+	</select>
+	
+	<select id="com_login" resultType="com.spring.project.dto.BDto">
+		select * from com_user where com_id = #{param1} and com_pw = #{param2}
+	</select>
+	
+	<select id="listDao" resultType="com.spring.project.dto.ContentDto">
+		SELECT * FROM POST ORDER BY COM_ID DESC
+	</select>
+	
+	<select id="searchDao" resultType="com.spring.project.dto.ContentDto">
+		select * FROM POST WHERE title like CONCAT('%',#{param1},'%')
+	</select>
+	
+	<select id="userDao" resultType="com.spring.project.dto.UserDto">
+		select * from user where user_id = #{param1}
+	</select>
+	
+	<select id="comuser" resultType="com.spring.project.dto.BDto">
+		select com_id, com_pw, company_name, address, business_num from com_user where com_id = #{param1}
+	</select>
+	
+	<select id="viewDao" resultType="com.spring.project.dto.ContentDto">
+	 	select * from post where seq = #{param1}
+	</select>
+	
+	<select id="comMainlist" resultType="com.spring.project.dto.BDto">
+		select seq, title from post where com_id = #{param1}
+	</select>
+	
+	<insert id="comcontwrite">
+		insert into post (com_id, title, contents) values (#{param1},#{param2},#{param3})
+	</insert>
+	
+	<insert id="apply">
+		insert into apply (user_id, seq) values (#{param1},#{param2})
+	</insert>
+	
+	<select id="comApplylist" resultType="com.spring.project.dto.BDto">
+		select u.name, u.age, u.major, u.education, u.email from user as u, post as p, apply as a where a.seq = #{param1} and a.user_id=u.user_id group by u.name
+	</select>
+	
+	<select id="comContentlist" resultType="com.spring.project.dto.BDto">
+		select seq, contents, title from post where seq = #{param1} 
+	</select>
+	
+	<select id="comContUpdateViewlist" resultType="com.spring.project.dto.BDto">
+		select seq, contents, title from post where seq = #{param1} 
+	</select>	
+	
+	<select id="userApplyInfo" resultType="com.spring.project.dto.BDto">
+		select com_id, contents, title from post as p, apply as a where a.user_id =#{param1} and a.seq = p.seq
+	</select>
+	
+	<update id="comContUpdate">
+		update post set title=#{param2},contents=#{param3} where seq = #{param4};
+	</update>
+	
+	<insert id="userjoin">	
+		insert into user (user_id,user_pw,name,age,email,major,education) values (#{param1}, #{param2} , #{param3}, #{param4}, #{param5}, #{param6}, #{param7})
+	</insert>
+	
+	<insert id="comjoin">	
+		insert into com_user (com_id, com_pw, business_num, address, company_name, company_logo) values (#{param1}, #{param2} , #{param3}, #{param4}, #{param5}, #{param6})
+	</insert>
+	
+	<update id="userupdateDao">
+		UPDATE USER SET USER_PW = #{param2}, NAME = #{param3}, EMAIL = #{param4}, AGE = #{param5}, EDUCATION = #{param6}, MAJOR = #{param7} WHERE USER_ID = #{param1}
+	</update>
+	
+	<update id="comupdateDao">
+		update com_user set com_pw = #{param2}, company_name = #{param3}, address = #{param4}, business_num = #{param5} where com_id = #{param1}
+	</update>
+	
+	<delete id="deleteDao">
+		DELETE FROM POST WHERE SEQ = #{param1}
+	</delete>
+	
+	
+	<delete id="deleteuserDao">
+		DELETE FROM USER WHERE USER_ID = #{param1}
+	</delete>
+	
+	<delete id="deletecomuserDao">
+		delete from com_user where com_id = #{param1}
+	</delete>
+	
+	
+</mapper>
